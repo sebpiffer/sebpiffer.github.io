@@ -11,9 +11,32 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
         <style>
-            /* ══════════════════════════════════════
-               RESET E VARIABILI DI DESIGN (TEMA CHIARO)
-               ══════════════════════════════════════ */
+            /*
+               ==========================================================================
+               LEGENDA DELLE CLASSI CSS PRINCIPALI (STRUTTURA & IMPAGINAZIONE)
+               ==========================================================================
+               #presentation-stage : La cornice virtuale (1920x1080) scalata in proporzione.
+               #deck               : Il contenitore globale di tutte le slide.
+               .slide              : Classe di base per ogni singola schermata della presentazione.
+               .slide-grid         : Griglia responsive che organizza la slide in due colonne principali.
+               .left-column        : Colonna sinistra riservata ai testi espositivi e alle schede.
+               .ph                 : Box segnaposto per le foto (Placeholder).
+               .ph-container       : Contenitore a griglia per slide con doppia immagine verticale.
+
+               ==========================================================================
+               LEGENDA DELLE CLASSI CSS DI TIPOGRAFIA & CARD
+               ==========================================================================
+               .lbl                : Etichetta a inizio slide in font monospazio (es. "REPORT STAGE").
+               h1.d / h2.d         : Titoli principali di grande impatto visivo.
+               p.bd                : Paragrafo di descrizione / Sottotitolo (Impostato a 28px).
+               .ic-container       : Raggruppamento verticale per le schede informative.
+               .ic                 : La singola Card con sfondo bianco, bordi arrotondati e ombra.
+               .ic-v               : Testo descrittivo principale all'interno delle Card (Impostato a 32px).
+               .stat-box           : Box speciali usati per mettere in risalto dati o termini tecnici.
+               .stat-n             : Intestazione evidenziata dentro i box statistici.
+               .hud                : Elementi dell'interfaccia fissa (es. numero slide, titoli d'angolo).
+            */
+
             *,
             *::before,
             *::after {
@@ -27,31 +50,24 @@
                 --text-main: #0f172a;
                 --text-sub: #475569;
                 --text-muted: #94a3b8;
-
-                /* Accento Azzurro Aeroporto (Sky/Airport) */
                 --sky: #0ea5e9;
                 --sky-light: #f0f9ff;
                 --sky-border: #bae6fd;
-
-                /* Accento Blu Airbus (Airbus Corporate Blue) */
                 --ab: #00205b;
                 --ab-light: #f0f4f8;
                 --ab-border: #b9cbd9;
-
                 --mono: "JetBrains Mono", monospace;
                 --sans: "Plus Jakarta Sans", sans-serif;
-
                 --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
                 --shadow-md: 0 10px 30px -10px rgba(15, 23, 42, 0.08);
                 --shadow-lg: 0 20px 40px -15px rgba(15, 23, 42, 0.12);
             }
-
             html,
             body {
                 width: 100%;
                 height: 100%;
                 overflow: hidden;
-                background: #090d16; /* Sfondo scuro per sala proiezioni */
+                background: #090d16;
                 color: var(--text-main);
                 font-family: var(--sans);
                 cursor: none;
@@ -61,9 +77,6 @@
                 justify-content: center;
             }
 
-            /* ══════════════════════════════════════
-               CONTENITORE FISSO PROPORZIONATO (16:9)
-               ══════════════════════════════════════ */
             #presentation-stage {
                 position: absolute;
                 top: 50%;
@@ -77,10 +90,6 @@
                 box-shadow: 0 25px 70px rgba(0, 0, 0, 0.5);
                 border-radius: 12px;
             }
-
-            /* ══════════════════════════════════════
-               BARRE DINAMICHE DI SEZIONE (HEADER/FOOTER)
-               ══════════════════════════════════════ */
             .slide-bar-top {
                 position: absolute;
                 top: 0;
@@ -99,7 +108,6 @@
                 z-index: 150;
                 transform-origin: right center;
             }
-
             .bar-gradient {
                 background: linear-gradient(90deg, var(--sky), var(--ab));
             }
@@ -113,9 +121,6 @@
                 background: var(--ab);
             }
 
-            /* ══════════════════════════════════════
-               CURSORE MAGNETICO PREMIUM
-               ══════════════════════════════════════ */
             #cur {
                 position: fixed;
                 top: 0;
@@ -159,9 +164,6 @@
                 transform: translate(-50%, -50%) scale(1.3);
             }
 
-            /* ══════════════════════════════════════
-               DECK E SLIDE STRUCTURE
-               ══════════════════════════════════════ */
             #deck {
                 position: relative;
                 width: 100%;
@@ -174,7 +176,7 @@
                 display: grid;
                 opacity: 0;
                 pointer-events: none;
-                padding: 140px 120px 100px 120px; /* Aumentato padding top per evitare sovrapposizioni con HUD/Logo */
+                padding: 130px 110px 90px 110px;
                 align-items: center;
                 background: var(--bg-base);
             }
@@ -183,32 +185,28 @@
                 pointer-events: all;
                 z-index: 10;
             }
-
             .slide-grid {
                 display: grid;
                 grid-template-columns: 1.15fr 0.85fr;
-                gap: 80px;
+                gap: 72px;
                 width: 100%;
                 max-width: 1680px;
                 margin: 0 auto;
                 height: 100%;
                 align-items: center;
             }
-
             .left-column {
                 display: flex;
                 flex-direction: column;
-                gap: 30px; /* Ottimizzato per evitare overflow */
+                gap: 24px;
                 justify-content: center;
                 height: 100%;
             }
 
-            /* ══════════════════════════════════════
-               COMPONENTI INTERFACCIA ED ELEMENTI GRAFICI
-               ══════════════════════════════════════ */
+            /* Sottotitoli Generali di Slide impostati a 28px */
             .lbl {
                 font-family: var(--mono);
-                font-size: 14px;
+                font-size: 15px;
                 font-weight: 500;
                 letter-spacing: 0.2em;
                 text-transform: uppercase;
@@ -224,25 +222,25 @@
                 background: currentColor;
             }
             h1.d {
-                font-size: 72px;
+                font-size: 80px;
                 font-weight: 800;
-                line-height: 1.1;
+                line-height: 1.08;
                 letter-spacing: -0.03em;
                 color: var(--text-main);
-                margin: 16px 0;
+                margin: 14px 0;
             }
             h2.d {
-                font-size: 54px;
+                font-size: 62px;
                 font-weight: 800;
-                line-height: 1.15;
+                line-height: 1.12;
                 letter-spacing: -0.02em;
                 color: var(--text-main);
-                margin: 10px 0;
+                margin: 8px 0;
             }
             p.bd {
-                font-size: 20px;
+                font-size: 26px;
                 font-weight: 400;
-                line-height: 1.65;
+                line-height: 1.5;
                 color: var(--text-sub);
             }
 
@@ -253,17 +251,16 @@
                 color: var(--ab);
             }
 
-            /* Card informative (ottimizzate) */
             .ic-container {
                 display: flex;
                 flex-direction: column;
-                gap: 16px; /* Spaziatura compatta anti-overflow */
+                gap: 18px;
             }
             .ic {
                 background: var(--bg-card);
                 border: 1px solid #e2e8f0;
                 border-radius: 16px;
-                padding: 22px 28px;
+                padding: 24px 30px;
                 box-shadow: var(--shadow-sm);
                 transition:
                     transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -275,45 +272,23 @@
                 box-shadow: var(--shadow-md);
                 border-color: #cbd5e1;
             }
-            .ic-l {
-                font-family: var(--mono);
-                font-size: 11px;
-                font-weight: 600;
-                letter-spacing: 0.15em;
-                text-transform: uppercase;
-                color: var(--text-muted);
-                margin-bottom: 6px;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-            .ic-l::before {
-                content: "";
-                width: 6px;
-                height: 6px;
-                border-radius: 50%;
-                background: var(--sky);
-            }
-            .ic-ab .ic-l::before {
-                background: var(--ab);
-            }
+            /* Testo descrittivo interno alle Card impostato a 32px */
             .ic-v {
-                font-size: 16px;
+                font-size: 32px;
                 font-weight: 400;
                 color: var(--text-sub);
-                line-height: 1.55;
+                line-height: 1.4;
             }
             .ic-v strong {
                 color: var(--text-main);
                 font-weight: 600;
             }
 
-            /* Statistiche / Box Competenze */
             .stat-box {
                 background: var(--bg-card);
                 border: 1px solid #e2e8f0;
                 border-radius: 20px;
-                padding: 24px 32px;
+                padding: 24px 30px;
                 box-shadow: var(--shadow-sm);
                 transition:
                     transform 0.3s,
@@ -325,18 +300,9 @@
             }
             .stat-n {
                 font-family: var(--sans);
-                font-size: 32px; /* Ridotto leggermente per evitare overflow sui titoli lunghi */
+                font-size: 30px;
                 font-weight: 800;
                 line-height: 1.1;
-            }
-            .stat-l {
-                font-family: var(--mono);
-                font-size: 11px;
-                font-weight: 600;
-                color: var(--text-muted);
-                text-transform: uppercase;
-                letter-spacing: 0.15em;
-                margin-top: 6px;
             }
 
             .centered-slide {
@@ -354,14 +320,11 @@
                 display: none;
             }
 
-            /* ══════════════════════════════════════
-               PLACEHOLDER IMMAGINI
-               ══════════════════════════════════════ */
             .ph {
                 width: 100%;
                 height: 100%;
-                min-height: 350px;
-                max-height: 720px;
+                min-height: 320px;
+                max-height: 700px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -413,17 +376,13 @@
             .ph:hover span {
                 color: var(--text-main);
             }
-
             .ph-container {
                 display: grid;
                 grid-template-rows: 1fr 1fr;
-                gap: 24px;
+                gap: 22px;
                 height: 100%;
             }
 
-            /* ══════════════════════════════════════
-               ELEMENTI HUD ED ESTETICI FISSI
-               ══════════════════════════════════════ */
             .hud {
                 position: absolute;
                 z-index: 30;
@@ -434,7 +393,6 @@
                 color: var(--text-muted);
                 pointer-events: none;
             }
-
             .global-logo {
                 position: absolute;
                 top: 52px;
@@ -443,7 +401,6 @@
                 z-index: 40;
                 pointer-events: none;
             }
-
             .htl {
                 top: 76px;
                 left: 240px;
@@ -466,7 +423,6 @@
                 font-style: normal;
                 color: var(--text-sub);
             }
-
             #cnt {
                 position: absolute;
                 bottom: 48px;
@@ -478,41 +434,6 @@
                 color: var(--text-sub);
             }
 
-            #hint {
-                position: absolute;
-                bottom: 48px;
-                left: 50%;
-                transform: translateX(-50%);
-                z-index: 100;
-                font-family: var(--mono);
-                font-size: 11px;
-                letter-spacing: 0.2em;
-                text-transform: uppercase;
-                color: var(--text-muted);
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            }
-            .hd {
-                width: 8px;
-                height: 8px;
-                border-radius: 50%;
-                background: var(--sky);
-                animation: pulse 1.8s ease-in-out infinite;
-            }
-            @keyframes pulse {
-                0%,
-                100% {
-                    transform: scale(1);
-                    opacity: 0.4;
-                }
-                50% {
-                    transform: scale(1.3);
-                    opacity: 1;
-                }
-            }
-
-            /* Prevenzione Flash d'ingresso */
             .slide:not(.active) .lbl,
             .slide:not(.active) h1.d,
             .slide:not(.active) h2.d,
@@ -530,9 +451,6 @@
                 transform: scaleX(0);
             }
 
-            /* ══════════════════════════════════════
-               TRANSITION LAYER - LIQUID CURTAIN
-               ══════════════════════════════════════ */
             #svgT {
                 position: absolute;
                 inset: 0;
@@ -549,23 +467,21 @@
     <body>
         <div id="cur"></div>
         <div id="cur-r"></div>
-
         <div id="presentation-stage">
             <img
                 src="https://servizi.martinomartini.eu/images/sampledata/logo_istituto/logo_trasp_200.png"
                 alt="Logo"
                 class="global-logo"
             />
-
             <svg id="svgT" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <path id="t-path" d="M 0 100 V 100 Q 50 100 100 100 V 100 z" />
             </svg>
 
             <div id="deck">
+                <!-- SLIDE 0 -->
                 <section class="slide active" id="s0">
                     <div class="slide-bar-top bar-gradient"></div>
                     <div class="slide-bar-bottom bar-gradient-reverse"></div>
-
                     <div
                         style="
                             position: absolute;
@@ -674,7 +590,6 @@
                             />
                         </svg>
                     </div>
-
                     <div
                         class="slide-grid"
                         style="position: relative; z-index: 1"
@@ -682,23 +597,36 @@
                         <div class="left-column">
                             <div>
                                 <div class="lbl" id="s0a">
-                                    Report Stage 2024/2025
+                                    Report Stage 2024/2026
                                 </div>
                                 <h1 class="d" id="s0b">
                                     Sebastian Piffer<br /><span class="sky"
-                                        >ASL 2024/2025</span
+                                        >ASL 2024/2026</span
                                     >
                                 </h1>
                                 <p
                                     class="bd"
                                     id="s0c"
-                                    style="max-width: 520px; margin-top: 15px"
+                                    style="max-width: 520px; margin-top: 14px"
                                 >
-                                    Presentazione delle esperienze di alternanza
-                                    scuola lavoro svolte nel triennio.
+                                    Resoconto delle esperienze di alternanza
+                                    scuola–lavoro del triennio
                                 </p>
                             </div>
                         </div>
+
+                        <!--
+                            ==========================================================================
+                            ISTRUZIONI SOSTITUZIONE IMMAGINE (SLIDE 0)
+                            ==========================================================================
+                            Per rimpiazzare il riquadro segnaposto con una tua immagine reale,
+                            elimina l'intero blocco <div class="ph" id="s0-ph">...</div> qui sotto
+                            e sostituiscilo con questo tag <img>:
+
+                            <img src="URL_DELLA_TUA_IMMAGINE.jpg"
+                                 alt="Panoramica Aeroporto Caproni"
+                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 28px; box-shadow: var(--shadow-sm);" />
+                        -->
                         <div class="ph" id="s0-ph">
                             <svg
                                 width="64"
@@ -725,10 +653,10 @@
                     <div class="hud htr">SLIDE<br /><em>01 / 09</em></div>
                 </section>
 
+                <!-- SLIDE 1 -->
                 <section class="slide" id="s1">
                     <div class="slide-bar-top bar-sky"></div>
                     <div class="slide-bar-bottom bar-sky"></div>
-
                     <div class="slide-grid">
                         <div class="left-column">
                             <div>
@@ -743,50 +671,45 @@
                                 <p
                                     class="bd"
                                     id="s1e"
-                                    style="margin-bottom: 10px"
+                                    style="margin-bottom: 8px"
                                 >
-                                    Unico scalo aeroportuale della provincia di
-                                    Trento, gestito da Trentino Trasporti. Sede
-                                    di diverse strutture di servizi di aviazione
-                                    e complementari.
+                                    Unico aeroporto della provincia di Trento, è
+                                    sede anche di diverse attività collegate al
+                                    mondo dell'aviazione
                                 </p>
                             </div>
-
                             <div class="ic-container" id="s1d">
                                 <div class="ic">
-                                    <div class="ic-l">
-                                        Infrastruttura e Traffico
-                                    </div>
                                     <div class="ic-v">
-                                        La struttura ospita e gestisce traffico
-                                        misto di
+                                        Fino a 50 movimenti al giorno tra
                                         <strong
-                                            >aerei, elicotteri e alianti</strong
-                                        >, con particolare attenzione al
-                                        servizio di elisoccorso.
+                                            >elicotteri, aerei e alianti</strong
+                                        >
                                     </div>
                                 </div>
                                 <div class="ic">
-                                    <div class="ic-l">
-                                        Funzioni di Controllo
-                                    </div>
                                     <div class="ic-v">
-                                        Gli operatori in Torre svolgono sia il
-                                        ruolo di
-                                        <strong
-                                            >FISO (Flight Information Service
-                                            Officer)</strong
-                                        >
-                                        che di
+                                        Operatori Torre con doppio ruolo:
+                                        <strong>FISO</strong> e
                                         <strong
                                             >Operatori Unici
                                             Aeroportuali</strong
-                                        >, coordinando i servizi informativi
-                                        AFIS, antincendio e rifornimenti.
+                                        >
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!--
+                            ==========================================================================
+                            ISTRUZIONI SOSTITUZIONE IMMAGINE (SLIDE 1)
+                            ==========================================================================
+                            Sostituisci il blocco <div class="ph" id="s1-ph">...</div> qui sotto con:
+
+                            <img src="URL_DELLA_TUA_IMMAGINE.jpg"
+                                 alt="Struttura Aeroporto Caproni"
+                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 28px; box-shadow: var(--shadow-sm);" />
+                        -->
                         <div class="ph" id="s1-ph">
                             <svg
                                 width="64"
@@ -810,10 +733,10 @@
                     <div class="hud htr">SLIDE<br /><em>02 / 09</em></div>
                 </section>
 
+                <!-- SLIDE 2 -->
                 <section class="slide" id="s2">
                     <div class="slide-bar-top bar-sky"></div>
                     <div class="slide-bar-bottom bar-sky"></div>
-
                     <div class="slide-grid">
                         <div class="left-column">
                             <div>
@@ -824,50 +747,43 @@
                                     Attività svolte<br />in
                                     <span class="sky">Torre di Controllo</span>
                                 </h2>
-                                <p
-                                    class="bd"
-                                    id="s2e"
-                                    style="margin-bottom: 10px"
-                                >
-                                    Affiancamento al personale FISO per
-                                    comprendere la gestione dinamica del
-                                    traffico aereo locale (VFR/IFR) e le
-                                    comunicazioni con i piloti.
-                                </p>
                             </div>
-
                             <div class="ic-container" id="s2d">
                                 <div class="ic">
-                                    <div class="ic-l">Amministrativo</div>
                                     <div class="ic-v">
-                                        Compilazione delle
+                                        Compilazione
                                         <strong>strip aeronautiche</strong>,
-                                        raccolta dati meteorologici locali e
-                                        gestione dell'apertura/chiusura dei
-                                        piani di volo.
+                                        raccolta dati meteo e gestione piani di
+                                        volo.
                                     </div>
                                 </div>
                                 <div class="ic">
-                                    <div class="ic-l">Ispezioni Pista</div>
                                     <div class="ic-v">
-                                        Monitoraggio del manto di pista e delle
-                                        strutture antincendio, per la
-                                        prevenzione del pericolo
-                                        <strong>FOD</strong> (Foreign Object
-                                        Debris).
+                                        Monitoraggio di pista e strutture
+                                        antincendio per prevenzione
+                                        <strong>FOD</strong>.
                                     </div>
                                 </div>
                                 <div class="ic">
-                                    <div class="ic-l">Sistemi di terra</div>
                                     <div class="ic-v">
-                                        Visione e spiegazione da parte dei fiso
-                                        delle strutture a terra per il traffico
-                                        aereo, come il
+                                        Spiegazione delle strutture di supporto
+                                        al traffico aereo, come il
                                         <strong>VOR DME</strong>.
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!--
+                            ==========================================================================
+                            ISTRUZIONI SOSTITUZIONE IMMAGINE (SLIDE 2)
+                            ==========================================================================
+                            Sostituisci il blocco <div class="ph" id="s2-ph">...</div> qui sotto con:
+
+                            <img src="URL_DELLA_TUA_IMMAGINE.jpg"
+                                 alt="Interno Torre di Controllo"
+                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 28px; box-shadow: var(--shadow-sm);" />
+                        -->
                         <div class="ph" id="s2-ph">
                             <svg
                                 width="64"
@@ -896,10 +812,10 @@
                     <div class="hud htr">SLIDE<br /><em>03 / 09</em></div>
                 </section>
 
+                <!-- SLIDE 3 -->
                 <section class="slide" id="s3">
                     <div class="slide-bar-top bar-sky"></div>
                     <div class="slide-bar-bottom bar-sky"></div>
-
                     <div class="slide-grid">
                         <div class="left-column">
                             <div>
@@ -908,58 +824,69 @@
                                     Competenze acquisite<br />con i
                                     <span class="sky">FISO</span>
                                 </h2>
-                                <p
-                                    class="bd"
-                                    id="s3e"
-                                    style="margin-bottom: 10px"
-                                >
-                                    L'esperienza lavorativa nella torre di
-                                    controllo mi ha permesso di sviluppare
-                                    abilità sul campo e applicare le conoscenze
-                                    scolastiche:
-                                </p>
                             </div>
-
                             <div
                                 style="
                                     display: flex;
                                     flex-direction: column;
-                                    gap: 16px;
+                                    gap: 14px;
                                 "
                                 id="s3d"
                             >
                                 <div class="stat-box">
-                                    <div class="stat-n sky">METAR & TAF</div>
-                                    <div class="stat-l">Meteo Aeronautico</div>
+                                    <div class="stat-n sky">
+                                        METAR &amp; TAF
+                                    </div>
                                     <p
                                         class="bd"
-                                        style="font-size: 16px; margin-top: 4px"
+                                        style="
+                                            font-size: 28px;
+                                            margin-top: 8px;
+                                            line-height: 1.4;
+                                        "
                                     >
-                                        Analisi e interpretazione dei bollettini
-                                        meteo di osservazione (METAR) e
-                                        previsione (TAF) per informare gli
-                                        aeromobili in transito.
+                                        Lettura e interpretazione dei bollettini
+                                        meteo METAR e TAF e analisi delle
+                                        condizioni dell'aeroporto
                                     </p>
                                 </div>
                                 <div class="stat-box">
                                     <div class="stat-n sky">
-                                        GESTIONE DEL TRAFFICO
-                                    </div>
-                                    <div class="stat-l">
-                                        Gestione dei voli e coordinamenti
+                                        GESTIONE TRAFFICO
                                     </div>
                                     <p
                                         class="bd"
-                                        style="font-size: 16px; margin-top: 4px"
+                                        style="
+                                            font-size: 28px;
+                                            margin-top: 8px;
+                                            line-height: 1.4;
+                                        "
                                     >
-                                        Analisi dei piani di volo, gestione del
-                                        traffico, comunicazioni radio e
-                                        coordinamenti procedurali con gli altri
-                                        scali.
+                                        Analisi piani di volo, comunicazioni
+                                        radio e coordinamenti procedurali con
+                                        gli altri scali.
                                     </p>
                                 </div>
                             </div>
                         </div>
+
+                        <!--
+                            ==========================================================================
+                            ISTRUZIONI SOSTITUZIONE IMMAGINI DOPPIE (SLIDE 3)
+                            ==========================================================================
+                            Questa slide ha una griglia a due immagini sovrapposte verticalmente.
+                            Sostituisci rispettivamente i blocchi di "s3-ph1" e "s3-ph2" con:
+
+                            In s3-ph1:
+                            <img src="URL_FOTO_1.jpg"
+                                 alt="Strumentazione Radar"
+                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 28px; box-shadow: var(--shadow-sm);" />
+
+                            In s3-ph2:
+                            <img src="URL_FOTO_2.jpg"
+                                 alt="Avvicinamento PINS"
+                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 28px; box-shadow: var(--shadow-sm);" />
+                        -->
                         <div class="ph-container">
                             <div class="ph" id="s3-ph1">
                                 <svg
@@ -975,7 +902,8 @@
                                     />
                                 </svg>
                                 <span
-                                    >FOTO 1 — STRUMENTAZIONE METEO & RADAR</span
+                                    >FOTO 1 — STRUMENTAZIONE METEO &amp;
+                                    RADAR</span
                                 >
                             </div>
                             <div class="ph" id="s3-ph2">
@@ -1002,10 +930,10 @@
                     <div class="hud htr">SLIDE<br /><em>04 / 09</em></div>
                 </section>
 
+                <!-- SLIDE 4 -->
                 <section class="slide" id="s4">
                     <div class="slide-bar-top bar-ab"></div>
                     <div class="slide-bar-bottom bar-ab"></div>
-
                     <div class="slide-grid">
                         <div class="left-column">
                             <div>
@@ -1017,53 +945,52 @@
                                     02 · L'Ente Ospitante
                                 </div>
                                 <h2 class="d" id="s4c">
-                                    Airbus <br /><span class="ab"
+                                    Airbus<br /><span class="ab"
                                         >Helicopters Italia</span
                                     >
                                 </h2>
                                 <p
                                     class="bd"
                                     id="s4e"
-                                    style="margin-bottom: 10px"
+                                    style="margin-bottom: 8px"
                                 >
-                                    Centro di eccellenza per la manutenzione e
-                                    la gestione della navigabilità (CAMO) per
-                                    elicotteri della flotta Airbus nel sud
-                                    Europa.
+                                    Azienda di riferimento per la manutenzione e
+                                    la modifica degli elicotteri Airbus che fa
+                                    servizio di CAMO per tutto il sud Europa
                                 </p>
                             </div>
-
                             <div class="ic-container ic-ab" id="s4d">
                                 <div class="ic">
-                                    <div class="ic-l">
-                                        Manutenzione e Navigabilità
-                                    </div>
                                     <div class="ic-v">
-                                        Progetta ed esegue interventi di
+                                        Interventi di
                                         <strong
                                             >manutenzione ordinaria e
                                             straordinaria</strong
                                         >
-                                        su elicotteri flotta Airbus e motori
-                                        SAFRAN, servendo sia enti pubblici che
-                                        privati.
+                                        su elicotteri Airbus e motori SAFRAN.
                                     </div>
                                 </div>
                                 <div class="ic">
-                                    <div class="ic-l">Design & Production</div>
                                     <div class="ic-v">
-                                        Una sezione specializzata dedicata alla
-                                        progettazione e allo sviluppo di
-                                        <strong
-                                            >allestimenti speciali
-                                            personalizzati</strong
-                                        >
-                                        (es. elisoccorso EMS, forze
-                                        dell'ordine).
+                                        Sezione dedicata agli
+                                        <strong>allestimenti speciali</strong>:
+                                        elisoccorso EMS, forze dell'ordine e
+                                        configurazioni speciali.
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!--
+                            ==========================================================================
+                            ISTRUZIONI SOSTITUZIONE IMMAGINE (SLIDE 4)
+                            ==========================================================================
+                            Sostituisci il blocco <div class="ph ph-ab" id="s4-ph">...</div> qui sotto con:
+
+                            <img src="URL_DELLA_TUA_IMMAGINE.jpg"
+                                 alt="Centro Tecnico Airbus"
+                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 28px; box-shadow: var(--shadow-sm);" />
+                        -->
                         <div class="ph ph-ab" id="s4-ph">
                             <svg
                                 width="64"
@@ -1085,10 +1012,10 @@
                     <div class="hud htr">SLIDE<br /><em>05 / 09</em></div>
                 </section>
 
+                <!-- SLIDE 5 -->
                 <section class="slide" id="s5">
                     <div class="slide-bar-top bar-ab"></div>
                     <div class="slide-bar-bottom bar-ab"></div>
-
                     <div class="slide-grid">
                         <div class="left-column">
                             <div>
@@ -1100,49 +1027,41 @@
                                     02 · Helicopters Italia
                                 </div>
                                 <h2 class="d" id="s5c">
-                                    Attività svolte nel<br /><span class="ab"
-                                        >Processo di Gestione</span
+                                    Attività svolte come<br /><span class="ab"
+                                        >Maintenance Support</span
                                     >
                                 </h2>
-                                <p
-                                    class="bd"
-                                    id="s5e"
-                                    style="margin-bottom: 10px"
-                                >
-                                    Affiancamento nell'analisi dell'ingegneria
-                                    di processo e focalizzazione sulla
-                                    digitalizzazione dei flussi cartacei
-                                    dell'hangar.
-                                </p>
                             </div>
-
                             <div class="ic-container ic-ab" id="s5d">
                                 <div class="ic">
-                                    <div class="ic-l">
-                                        Flussi Informativi in Hangar
-                                    </div>
                                     <div class="ic-v">
-                                        Analisi e mappatura delle procedure
-                                        cartacee relative ai
-                                        <strong>Workreport dei tecnici</strong>
-                                        e tracciamento dei tempi di
-                                        manutenzione.
+                                        Mappatura dei processi dei
+                                        <strong>Workreport tecnici</strong> e
+                                        analisi delle possibilità di
+                                        ottimizzazione
                                     </div>
                                 </div>
                                 <div class="ic">
-                                    <div class="ic-l">
-                                        Sviluppo Gestionale Web
-                                    </div>
                                     <div class="ic-v">
-                                        Progettazione di una web application
-                                        mirata a sostituire l'uso di fogli Excel
-                                        non condivisi, ottimizzando
-                                        l'interfaccia
-                                        <strong>Hangar-CAMO</strong>.
+                                        Progettazione di una
+                                        <strong>web app</strong> per sostituire
+                                        i fogli Excel e i documenti, per
+                                        ottimizzare le informazioni
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!--
+                            ==========================================================================
+                            ISTRUZIONI SOSTITUZIONE IMMAGINE (SLIDE 5)
+                            ==========================================================================
+                            Sostituisci il blocco <div class="ph ph-ab" id="s5-ph">...</div> qui sotto con:
+
+                            <img src="URL_DELLA_TUA_IMMAGINE.jpg"
+                                 alt="Workreport Cartaceo e Schermata Web App"
+                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 28px; box-shadow: var(--shadow-sm);" />
+                        -->
                         <div class="ph ph-ab" id="s5-ph">
                             <svg
                                 width="64"
@@ -1174,10 +1093,10 @@
                     <div class="hud htr">SLIDE<br /><em>06 / 09</em></div>
                 </section>
 
+                <!-- SLIDE 6 -->
                 <section class="slide" id="s6">
                     <div class="slide-bar-top bar-ab"></div>
                     <div class="slide-bar-bottom bar-ab"></div>
-
                     <div class="slide-grid">
                         <div class="left-column">
                             <div>
@@ -1189,61 +1108,75 @@
                                     02 · Competenza
                                 </div>
                                 <h2 class="d" id="s6c">
-                                    Ingegneria di Manutenzione<br />e
-                                    <span class="ab">Normative EASA</span>
+                                    Competenze acquisite<br />in
+                                    <span class="ab">Helicopters Italia</span>
                                 </h2>
-                                <p
-                                    class="bd"
-                                    id="s6e"
-                                    style="margin-bottom: 10px"
-                                >
-                                    Apprendimento dei rigorosi protocolli di
-                                    sicurezza europei per l'efficienza
-                                    continuativa di velivoli e componenti
-                                    meccaniche:
-                                </p>
                             </div>
-
                             <div
                                 style="
                                     display: flex;
                                     flex-direction: column;
-                                    gap: 16px;
+                                    gap: 14px;
                                 "
                                 id="s6d"
                             >
                                 <div class="stat-box">
-                                    <div class="stat-n ab">EASA PART-M</div>
-                                    <div class="stat-l">
-                                        Navigabilità Continua
+                                    <div class="stat-n ab">
+                                        MANUTENZIONE AERONAUTICA
                                     </div>
                                     <p
                                         class="bd"
-                                        style="font-size: 16px; margin-top: 4px"
+                                        style="
+                                            font-size: 28px;
+                                            margin-top: 8px;
+                                            line-height: 1.4;
+                                        "
                                     >
-                                        Studio delle normative europee che
-                                        impongono severi standard sul ciclo di
-                                        vita e il monitoraggio di ogni singolo
-                                        componente aeronautico.
+                                        Nozioni di processi e regolamenti della
+                                        manutenzione aeronautica e dei suoi
+                                        requisiti
                                     </p>
                                 </div>
                                 <div class="stat-box">
-                                    <div class="stat-n ab">CRITICAL TASKS</div>
-                                    <div class="stat-l">
-                                        Ingegneria di Processo
+                                    <div class="stat-n ab">
+                                        EFFICIENZA DEI PROCESSI
                                     </div>
                                     <p
                                         class="bd"
-                                        style="font-size: 16px; margin-top: 4px"
+                                        style="
+                                            font-size: 28px;
+                                            margin-top: 8px;
+                                            line-height: 1.4;
+                                        "
                                     >
-                                        Analisi dei flussi di manutenzione
-                                        critica su rotori e motori a turbina
-                                        <strong>SAFRAN</strong>, con focus sul
-                                        ponte comunicativo Hangar-CAMO.
+                                        Comprenione del
+                                        <strong>
+                                            flusso delle informazioni
+                                        </strong>
+                                        e delle sfide tecniche per ottimizzarne
+                                        la gestione
                                     </p>
                                 </div>
                             </div>
                         </div>
+
+                        <!--
+                            ==========================================================================
+                            ISTRUZIONI SOSTITUZIONE IMMAGINI DOPPIE (SLIDE 6)
+                            ==========================================================================
+                            Questa slide ha una griglia a due immagini sovrapposte verticalmente.
+                            Sostituisci rispettivamente i blocchi di "s6-ph1" e "s6-ph2" con:
+
+                            In s6-ph1:
+                            <img src="URL_FOTO_1.jpg"
+                                 alt="Documento Normativa EASA Part-M"
+                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 28px; box-shadow: var(--shadow-sm);" />
+
+                            In s6-ph2:
+                            <img src="URL_FOTO_2.jpg"
+                                 alt="Lavorazione Rotori Safran"
+                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 28px; box-shadow: var(--shadow-sm);" />
+                        -->
                         <div class="ph-container">
                             <div class="ph ph-ab" id="s6-ph1">
                                 <svg
@@ -1262,10 +1195,7 @@
                                     <line x1="16" y1="17" x2="8" y2="17" />
                                     <polyline points="10 9 9 9 8 9" />
                                 </svg>
-                                <span
-                                    >FOTO 1 — PROTOCOLLI DI NAVIGABILITÀ EASA
-                                    PART-M</span
-                                >
+                                <span>FOTO 1 — NORMATIVE EASA PART-M</span>
                             </div>
                             <div class="ph ph-ab" id="s6-ph2">
                                 <svg
@@ -1278,10 +1208,7 @@
                                 >
                                     <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
                                 </svg>
-                                <span
-                                    >FOTO 2 — ATTIVITÀ SU ROTORI & MOTORI
-                                    SAFRAN</span
-                                >
+                                <span>FOTO 2 — ROTORI &amp; MOTORI SAFRAN</span>
                             </div>
                         </div>
                     </div>
@@ -1291,10 +1218,10 @@
                     <div class="hud htr">SLIDE<br /><em>07 / 09</em></div>
                 </section>
 
+                <!-- SLIDE 7 -->
                 <section class="slide" id="s7">
                     <div class="slide-bar-top bar-ab"></div>
                     <div class="slide-bar-bottom bar-ab"></div>
-
                     <div class="slide-grid">
                         <div class="left-column">
                             <div>
@@ -1306,23 +1233,37 @@
                                     02 · Approfondimento
                                 </div>
                                 <h2 class="d" id="s7c">
-                                    Focus Progetto:<br /><span class="ab"
+                                    Progetto aziendale:<br /><span class="ab"
                                         >Digitalizzazione Hangar</span
                                     >
                                 </h2>
                                 <p
                                     class="bd"
                                     id="s7e"
-                                    style="max-width: 520px; margin-top: 15px"
+                                    style="max-width: 520px; margin-top: 14px"
                                 >
-                                    L'analisi dell'ingegneria di manutenzione ha
-                                    evidenziato la necessità di una transizione
-                                    ad applicativi Web proprietari per garantire
-                                    l'integrità e l'istantaneità dei dati Part-M
-                                    tra l'ufficio tecnico e la linea operativa.
+                                    Il periodo di stage ha portato a un
+                                    assuzione a tempo determinato per il
+                                    completamento del progetto della
+                                    <strong>web app per l'hangar</strong>, al
+                                    fine di digitalizzare la documentazione,
+                                    monitorare i tempi di manutenzione e
+                                    facilitare l'accesso alle risorse
+                                    documentali e la comunicazione
                                 </p>
                             </div>
                         </div>
+
+                        <!--
+                            ==========================================================================
+                            ISTRUZIONI SOSTITUZIONE IMMAGINE (SLIDE 7)
+                            ==========================================================================
+                            Sostituisci il blocco <div class="ph ph-ab" id="s7-ph">...</div> qui sotto con:
+
+                            <img src="URL_DELLA_TUA_IMMAGINE.jpg"
+                                 alt="Diagramma dei Flussi di Lavoro Hangar-CAMO"
+                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 28px; box-shadow: var(--shadow-sm);" />
+                        -->
                         <div class="ph ph-ab" id="s7-ph">
                             <svg
                                 width="64"
@@ -1342,10 +1283,7 @@
                                 <circle cx="8.5" cy="8.5" r="1.5" />
                                 <polyline points="21 15 16 10 5 21" />
                             </svg>
-                            <span
-                                >DIAGRAMMA FLUSSO · GESTIONE INFORMAZIONI
-                                CAMO</span
-                            >
+                            <span>DIAGRAMMA FLUSSO · GESTIONE CAMO</span>
                         </div>
                     </div>
                     <div class="hud htl">
@@ -1354,10 +1292,10 @@
                     <div class="hud htr">SLIDE<br /><em>08 / 09</em></div>
                 </section>
 
+                <!-- SLIDE 8 -->
                 <section class="slide" id="s8">
                     <div class="slide-bar-top bar-gradient"></div>
                     <div class="slide-bar-bottom bar-gradient-reverse"></div>
-
                     <div
                         style="
                             position: absolute;
@@ -1379,18 +1317,17 @@
                                 cy="50%"
                                 r="35%"
                                 fill="url(#grad-main)"
-                                opacity="0.6"
+                                opacity=".6"
                             />
                             <circle
                                 cx="50%"
                                 cy="50%"
                                 r="25%"
                                 fill="url(#grad-sub)"
-                                opacity="0.4"
+                                opacity=".4"
                             />
                         </svg>
                     </div>
-
                     <div
                         class="centered-slide"
                         style="position: relative; z-index: 1"
@@ -1406,15 +1343,14 @@
                             class="d"
                             id="s8c"
                             style="
-                                font-size: 96px;
-                                line-height: 1.1;
+                                font-size: 100px;
+                                line-height: 1.08;
                                 margin: 0;
                                 font-weight: 800;
                                 letter-spacing: -0.04em;
                             "
                         >
-                            Grazie per<br />
-                            <span
+                            Grazie per<br /><span
                                 style="
                                     background: linear-gradient(
                                         90deg,
@@ -1431,74 +1367,62 @@
                             class="bd"
                             id="s8e"
                             style="
-                                font-size: 24px;
+                                font-size: 26px;
                                 color: var(--text-sub);
-                                margin-top: 30px;
+                                margin-top: 28px;
                                 max-width: 800px;
                             "
                         >
-                            Istituto Martino Martini - 5CM 2025/2026
+                            Istituto Martino Martini · 5CM 2025/2026
                         </p>
                     </div>
-
                     <div class="hud htl">STAGE REPORT · CONCLUSIONE</div>
                     <div class="hud htr">SLIDE<br /><em>09 / 09</em></div>
                 </section>
             </div>
-
             <div id="cnt">01 / 09</div>
-            <div id="hint">
-                <span class="hd"></span>CLICCA O USA LE FRECCE PER AVANZARE
-            </div>
         </div>
 
         <script>
-            const TOTAL = 9; // Aggiornato a 9 slide totali
+            const TOTAL = 9;
             let cur = 0,
                 busy = false;
 
+            /* Adatta le dimensioni del palco della presentazione allo schermo disponibile */
             function scaleStage() {
-                const stage = document.getElementById("presentation-stage");
-                const baseWidth = 1920;
-                const baseHeight = 1080;
-                const winWidth = window.innerWidth;
-                const winHeight = window.innerHeight;
-                const scale = Math.min(
-                    winWidth / baseWidth,
-                    winHeight / baseHeight,
-                );
-                stage.style.transform = `translate(-50%, -50%) scale(${scale})`;
+                const s = document.getElementById("presentation-stage"),
+                    sc = Math.min(
+                        window.innerWidth / 1920,
+                        window.innerHeight / 1080,
+                    );
+                s.style.transform = `translate(-50%,-50%) scale(${sc})`;
             }
             window.addEventListener("resize", scaleStage);
             window.addEventListener("load", scaleStage);
 
-            /* CURSORE MAGNETICO */
+            /* Gestione del puntatore personalizzato morbido */
             const dot = document.getElementById("cur"),
                 ring = document.getElementById("cur-r");
             let mx = 0,
                 my = 0,
                 rx = 0,
                 ry = 0;
-
             document.addEventListener("mousemove", (e) => {
                 mx = e.clientX;
                 my = e.clientY;
                 dot.style.left = mx + "px";
                 dot.style.top = my + "px";
             });
-
-            (function updateCursor() {
+            (function u() {
                 rx += (mx - rx) * 0.15;
                 ry += (my - ry) * 0.15;
                 ring.style.left = rx + "px";
                 ring.style.top = ry + "px";
-                requestAnimationFrame(updateCursor);
+                requestAnimationFrame(u);
             })();
 
-            const interactiveElements = document.querySelectorAll(
-                ".ic, .ph, .stat-box, #hint",
-            );
-            interactiveElements.forEach((el) => {
+            /* Attivazione animazione al passaggio del puntatore sopra elementi cliccabili */
+            document.querySelectorAll(".ic,.ph,.stat-box").forEach((el) => {
                 el.addEventListener("mouseenter", () =>
                     document.body.classList.add("hover-active"),
                 );
@@ -1507,7 +1431,6 @@
                 );
             });
 
-            /* TIMELINE ENTRATE SLIDE */
             const enters = {
                 0() {
                     anime.set(["#s0a", "#s0b", "#s0c", "#s0-ph"], {
@@ -1518,7 +1441,7 @@
                         opacity: 0,
                     });
                     anime
-                        .timeline({ easing: "cubicBezier(0.25, 1, 0.5, 1)" })
+                        .timeline({ easing: "cubicBezier(0.25,1,0.5,1)" })
                         .add({
                             targets: [
                                 "#s0 .slide-bar-top",
@@ -1574,7 +1497,7 @@
                         opacity: 0,
                     });
                     anime
-                        .timeline({ easing: "cubicBezier(0.25, 1, 0.5, 1)" })
+                        .timeline({ easing: "cubicBezier(0.25,1,0.5,1)" })
                         .add({
                             targets: [
                                 "#s1 .slide-bar-top",
@@ -1623,7 +1546,7 @@
                         opacity: 0,
                     });
                     anime
-                        .timeline({ easing: "cubicBezier(0.25, 1, 0.5, 1)" })
+                        .timeline({ easing: "cubicBezier(0.25,1,0.5,1)" })
                         .add({
                             targets: [
                                 "#s2 .slide-bar-top",
@@ -1680,7 +1603,7 @@
                         opacity: 0,
                     });
                     anime
-                        .timeline({ easing: "cubicBezier(0.25, 1, 0.5, 1)" })
+                        .timeline({ easing: "cubicBezier(0.25,1,0.5,1)" })
                         .add({
                             targets: [
                                 "#s3 .slide-bar-top",
@@ -1730,7 +1653,7 @@
                         opacity: 0,
                     });
                     anime
-                        .timeline({ easing: "cubicBezier(0.25, 1, 0.5, 1)" })
+                        .timeline({ easing: "cubicBezier(0.25,1,0.5,1)" })
                         .add({
                             targets: [
                                 "#s4 .slide-bar-top",
@@ -1779,7 +1702,7 @@
                         opacity: 0,
                     });
                     anime
-                        .timeline({ easing: "cubicBezier(0.25, 1, 0.5, 1)" })
+                        .timeline({ easing: "cubicBezier(0.25,1,0.5,1)" })
                         .add({
                             targets: [
                                 "#s5 .slide-bar-top",
@@ -1836,7 +1759,7 @@
                         opacity: 0,
                     });
                     anime
-                        .timeline({ easing: "cubicBezier(0.25, 1, 0.5, 1)" })
+                        .timeline({ easing: "cubicBezier(0.25,1,0.5,1)" })
                         .add({
                             targets: [
                                 "#s6 .slide-bar-top",
@@ -1886,7 +1809,7 @@
                         opacity: 0,
                     });
                     anime
-                        .timeline({ easing: "cubicBezier(0.25, 1, 0.5, 1)" })
+                        .timeline({ easing: "cubicBezier(0.25,1,0.5,1)" })
                         .add({
                             targets: [
                                 "#s7 .slide-bar-top",
@@ -1923,7 +1846,7 @@
                         opacity: 0,
                     });
                     anime
-                        .timeline({ easing: "cubicBezier(0.25, 1, 0.5, 1)" })
+                        .timeline({ easing: "cubicBezier(0.25,1,0.5,1)" })
                         .add({
                             targets: [
                                 "#s8 .slide-bar-top",
@@ -1946,20 +1869,20 @@
                 },
             };
 
-            /* TRANSITION CONTROLLER */
             function doLiquidTransition(outEl, inEl, dir, onMid, onDone) {
                 const path = document.getElementById("t-path");
-                const waveIn = "M 0 100 V 100 Q 50 100 100 100 V 100 z";
-                const waveMid = "M 0 100 V 50 Q 50 0 100 50 V 100 z";
-                const waveFull = "M 0 100 V 0 Q 50 0 100 0 V 100 z";
-                const waveEnd = "M 0 0 V 0 Q 50 0 100 0 V 0 z";
-
                 anime.timeline({ easing: "easeInQuad" }).add({
                     targets: path,
                     d: [
-                        { value: waveIn },
-                        { value: waveMid, duration: 250 },
-                        { value: waveFull, duration: 250 },
+                        { value: "M 0 100 V 100 Q 50 100 100 100 V 100 z" },
+                        {
+                            value: "M 0 100 V 50 Q 50 0 100 50 V 100 z",
+                            duration: 250,
+                        },
+                        {
+                            value: "M 0 100 V 0 Q 50 0 100 0 V 100 z",
+                            duration: 250,
+                        },
                     ],
                     complete() {
                         outEl.classList.remove("active");
@@ -1968,9 +1891,12 @@
                         anime({
                             targets: path,
                             d: [
-                                { value: waveFull, duration: 50 },
                                 {
-                                    value: waveEnd,
+                                    value: "M 0 100 V 0 Q 50 0 100 0 V 100 z",
+                                    duration: 50,
+                                },
+                                {
+                                    value: "M 0 0 V 0 Q 50 0 100 0 V 0 z",
                                     duration: 400,
                                     easing: "easeOutQuad",
                                 },
@@ -1983,12 +1909,12 @@
                 });
             }
 
+            /* Navigazione alla slide desiderata */
             function goTo(next) {
                 if (busy || next === cur || next < 0 || next >= TOTAL) return;
                 busy = true;
-                const outEl = document.getElementById("s" + cur);
-                const inEl = document.getElementById("s" + next);
-
+                const outEl = document.getElementById("s" + cur),
+                    inEl = document.getElementById("s" + next);
                 doLiquidTransition(
                     outEl,
                     inEl,
@@ -2004,21 +1930,19 @@
                 );
             }
 
+            /* Aggiornamento dell'interfaccia HUD del contatore */
             function updateUI() {
                 document.getElementById("cnt").textContent =
                     String(cur + 1).padStart(2, "0") +
                     " / " +
                     String(TOTAL).padStart(2, "0");
-                document.getElementById("hint").style.opacity =
-                    cur === TOTAL - 1 ? "0" : "1";
             }
 
-            /* INPUT LISTENERS */
+            /* Event Listener per clic, tastiera e touch swipe */
             document.addEventListener("click", (e) => {
-                if (e.target.closest(".ic, .ph, .stat-box")) return;
+                if (e.target.closest(".ic,.ph,.stat-box")) return;
                 if (cur < TOTAL - 1) goTo(cur + 1);
             });
-
             document.addEventListener("keydown", (e) => {
                 if (["ArrowRight", "ArrowDown", " "].includes(e.key)) {
                     e.preventDefault();
@@ -2029,7 +1953,6 @@
                     goTo(cur - 1);
                 }
             });
-
             let ts = 0;
             document.addEventListener("touchstart", (e) => {
                 ts = e.touches[0].clientX;
